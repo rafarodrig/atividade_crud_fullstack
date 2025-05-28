@@ -5,7 +5,7 @@ export enum LivroStatus {
     DISPONIVEL = "disponivel",
     EMPRESTADO = "emprestado"
 }
-// (título, autor, ISBN, categoria, status: disponível/emprestado)
+
 @Entity()
 export class Livro {
     @PrimaryGeneratedColumn()
@@ -16,6 +16,10 @@ export class Livro {
     autor?: Autor;
     @Column()
     isbn?:string;
+    @Column({
+        nullable: true
+    })
+    capaUrl?:string;
     @Column({
             type : "enum",
             enum: LivroStatus,

@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import { LivroService } from '../service/LivroService';
-
 export class LivroController {
   private service: LivroService;
 
@@ -9,10 +8,16 @@ export class LivroController {
   }
 
   inserir = async (req: Request, res: Response): Promise<void> => {
-    const { titulo, autor, isbn } = req.body;
+    const { titulo, autor, isbn} = req.body;
+    
     try{ 
-        const novoLivro = await this.service.inserir({ titulo, autor,isbn });
-        res.status(201).json(novoLivro);
+      
+        const capaFilename = req.file?.filename;
+      
+      let novoLivro = await this.service.inserir({ titulo, autor, isbn}, capaFilename);
+
+      res.status(201).json(novoLivro);
+      
     }
     catch(err:any) {
         res.status(err.id).json({ error: err.msg });
@@ -37,10 +42,12 @@ export class LivroController {
   atualizar = async (req: Request, res: Response): Promise<void> => {
     const id = parseInt(req.params.id);
     const { titulo, autor, isbn } = req.body;
-
+    
     try{ 
-        const LivroAtulalizado = await this.service.atualizar(id, { titulo, autor, isbn });
-        res.json(LivroAtulalizado);
+      const capaFilename = req.file?.filename;
+        let LivroAtulalizado = await this.service.atualizar(id, { titulo, autor, isbn }, capaFilename)
+        res.status(200).json(LivroAtulalizado);
+
     } catch (err: any) {
         res.status(err.id).json({ error: err.msg });
     }

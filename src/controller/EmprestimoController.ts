@@ -44,4 +44,14 @@ export class EmprestimoController {
       }
     }
 
+    buscarPorClienteId = async (req: Request, res: Response): Promise<void> => {
+      const id = parseInt(req.params.id);
+      try{ 
+          const emprestimos = await this.service.buscarPorClienteId(id);
+          res.json(emprestimos);
+      } catch (err: any) {
+          res.status(err.id).json({ error: err.msg });
+      }
+    }
+
 }

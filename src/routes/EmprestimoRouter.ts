@@ -8,6 +8,5 @@ export const emprestimoRotas = (controller: EmprestimoController): Router => {
   router.get('/', controller.listar);
   router.get('/:id', controller.buscarPorId);
   router.patch('/:id/concluir', controller.concluirEmprestimo);
-
   return router;
 };

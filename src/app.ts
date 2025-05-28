@@ -18,6 +18,7 @@ import { LivroController } from './controller/LivroController';
 import { ClienteController } from './controller/ClienteController';
 import { EmprestimoController } from './controller/EmprestimoController';
 import { AutorController } from './controller/AutorController';
+
 // Routers
 import { livroRotas } from './routes/LivroRouter';
 import { emprestimoRotas } from './routes/EmprestimoRouter';
@@ -46,13 +47,15 @@ AppDataSource.initialize().then(async => {
 
   //Emprestimo
   const emprestimoRepository = AppDataSource.getRepository(Emprestimo);
-  const emprestimoService = new EmprestimoService(emprestimoRepository, livroService);
+  const emprestimoService = new EmprestimoService(emprestimoRepository, livroService, clienteService);
   const emprestimoController = new EmprestimoController(emprestimoService);
+
+
 
   // Routes
   app.use('/api/livros', livroRotas(livroController));
   app.use('/api/emprestimos', emprestimoRotas(emprestimoController));
-  app.use('/api/clientes', clienteRotas(clienteController));
+  app.use('/api/clientes', clienteRotas(clienteController, emprestimoController));
   app.use('/api/autores', autorRotas(autorController));
 
   const PORT = 3000;

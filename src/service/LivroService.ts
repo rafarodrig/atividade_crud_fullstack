@@ -10,10 +10,12 @@ export class LivroService {
     this.repository = repository;
   }
 
-    async inserir(livro: Livro): Promise<Livro> {
+    async inserir(livro: Livro, capaFilename: string | undefined): Promise<Livro> {
     if(!livro.titulo  || !livro.autor || !livro.isbn) {
         throw ({id: 400, msg: "Falta dados obrigatorios"});    
     }
+    if(capaFilename) livro = await this.atualizarFotoCapa(livro, capaFilename);
+    
     return await this.repository.save(livro);
   }
 
@@ -36,7 +38,7 @@ export class LivroService {
     return livro;
   }
 
-  async atualizar(id: number, livro: Livro): Promise<Livro> {
+  async atualizar(id: number, livro: Livro, capaFilename: string | undefined): Promise<Livro> {
     if(!livro.titulo  || !livro.autor || !livro.isbn) {
         throw ({id: 400, msg: "Falta dados obrigatorios"});    
     }
@@ -49,6 +51,7 @@ export class LivroService {
       livroAlt.titulo = livro.titulo;
       livroAlt.autor = livro.autor;
       livroAlt.isbn = livro.isbn;
+      if(capaFilename) livroAlt = await this.atualizarFotoCapa(livroAlt, capaFilename)
       return await this.repository.save(livroAlt);
     }
   }
@@ -91,10 +94,16 @@ export class LivroService {
   }
 
   async alterarStatusLivrosParaDisponivel(livros: Livro[]):Promise<void> {
+
     for(let livro of livros) {
       livro.status = LivroStatus.DISPONIVEL
       await this.repository.save(livro);
     }
+  }
+
+  async atualizarFotoCapa(livro:Livro, capaFilename: string ){  
+    livro.capaUrl = `/uploads/${capaFilename}`; 
+    return await this.repository.save(livro);
   }
 
 }
