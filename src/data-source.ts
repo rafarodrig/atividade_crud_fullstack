@@ -7,7 +7,7 @@ import { Autor } from "./model/Autor";
 export const AppDataSource = new DataSource({
     type: "postgres",    
     host: "localhost",
-    port: 5432,
+    port: 5433,
     username: "postgres",
     password: "123456",
     database: "api_atividade_biblioteca",

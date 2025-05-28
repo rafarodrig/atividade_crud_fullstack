@@ -8,9 +8,12 @@ export class LivroController {
   }
 
   inserir = async (req: Request, res: Response): Promise<void> => {
+    try{ 
+      if(!req.body){
+        throw ({id: 400, msg: "Nenhum dado foi informado"});
+      }
     const { titulo, autor, isbn} = req.body;
     
-    try{ 
       
         const capaFilename = req.file?.filename;
       

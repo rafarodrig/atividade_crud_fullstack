@@ -9,8 +9,11 @@ export class AutorController {
   }
 
   inserir = async (req: Request, res: Response): Promise<void> => {
-    const { nome, biografia } = req.body;
     try{ 
+      if(!req.body){
+        throw ({id: 400, msg: "Nenhum dado foi informado"});
+      }
+    const { nome, biografia } = req.body;
         const novoAutor = await this.service.inserir({ nome, biografia });
         res.status(201).json(novoAutor);
     }

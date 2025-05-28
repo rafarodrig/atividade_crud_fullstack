@@ -9,8 +9,11 @@ export class EmprestimoController {
     }
   
     inserir = async (req: Request, res: Response): Promise<void> => {
+      try{
+        if(!req.body){
+          throw ({id: 400, msg: "Nenhum dado foi informado"});
+        } 
       const { cliente, listaLivros, data_devolucao_prevista } = req.body;
-      try{ 
           const novoEmprestimo = await this.service.inserir({ cliente, listaLivros, data_devolucao_prevista });
           res.status(201).json(novoEmprestimo);
       }

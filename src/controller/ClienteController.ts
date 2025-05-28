@@ -9,8 +9,11 @@ export class ClienteController {
   }
 
   inserir = async (req: Request, res: Response): Promise<void> => {
-    const { nome, email } = req.body;
     try{ 
+    if(!req.body){
+      throw ({id: 400, msg: "Nenhum dado foi informado"});
+    }
+    const { nome, email } = req.body;
         const novoCliente = await this.service.inserir({ nome, email });
         res.status(201).json(novoCliente);
     }
